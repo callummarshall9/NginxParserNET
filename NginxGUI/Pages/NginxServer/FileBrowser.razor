@@ -1,0 +1,89 @@
+@using System.IO
+<h3>@Path</h3>
+
+<div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Path" aria-label="Path" aria-describedby="refresh-button" @bind="Path">
+    <div class="input-group-append">
+        <span class="input-group-text" id="refresh-button">
+            <button class="btn btn-primary" @onclick="(e => LoadPath(Path))"><span class="oi oi-loop-circular"></span></button>
+            <button class="btn btn-secondary" @onclick="(e => LoadParent(Path))"><span class="oi oi-chevron-top"></span> </button>
+        </span>
+    </div>
+</div>
+<div style="overflow: auto;max-height: 600px;height: 600px;">
+<table class="table" >
+    <thead>
+    <tr>
+        <th>Icon</th>
+        <th>Name</th>
+        <th>Last Modified</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var entry in DirectoryInfos.OrderBy(d => d.Name))
+    {
+        <tr @onclick="(e => LoadPath(entry.FullName))" style="background-color: darkgoldenrod">
+            <td><span class="oi oi-folder" ></span></td>
+            <td>@entry.Name</td>
+            <td>@entry.LastWriteTime</td>
+            <td>
+                @if (!SelectFile)
+                {
+                    <button class="btn btn-primary" @onclick:preventDefault="true" @onclick="(e => ChooseAction(entry.FullName))"><span class="oi oi-check"></span></button>
+                }
+            </td>
+        </tr>
+    }
+    
+    @foreach (var entry in FileInfos.OrderBy(d => d.Name))
+    {
+        <tr>
+            <td><span class="oi oi-file" ></span></td>
+            <td>@entry.Name</td>
+            <td>@entry.LastWriteTime</td>
+            <td>
+                @if (SelectFile)
+                {
+                    <button class="btn btn-primary" @onclick:preventDefault="true"  @onclick="(e => ChooseAction(entry.FullName))"><span class="oi oi-check"></span> </button>
+                }
+            </td>
+        </tr>
+       }
+    </tbody>
+</table>
+</div>
+
+@code {
+    [Parameter]
+    public string Path { get; set; }
+    [Parameter]
+    public bool SelectFile { get; set; }
+    [Parameter]
+    public Action<string> ChooseAction { get; set; }
+    
+    private DirectoryInfo[] DirectoryInfos { get; set; }
+    private FileInfo[] FileInfos { get; set; }
+
+    protected override async Task OnInitializedAsync() => LoadPath(Path);
+
+    public void LoadParent(string path)
+    {
+        var parent = new DirectoryInfo(path).Parent?.FullName;
+        Path = parent ?? path;
+        LoadPath(Path);
+    } 
+    
+    public void LoadPath(string path)
+    {
+        if (System.IO.Directory.Exists(path))
+        {
+            Path = path;
+            DirectoryInfo info = new DirectoryInfo(path);
+            DirectoryInfos = info.GetDirectories();
+            FileInfos = info.GetFiles();
+        }
+
+    }
+
+}

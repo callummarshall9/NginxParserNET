@@ -1,0 +1,39 @@
+@page "/Role/Create"
+@using NginxGUI.Data
+@using Microsoft.AspNetCore.Identity
+@inject RoleService RoleService
+@inject NavigationManager NavigationManager
+
+<h3>Create</h3>
+@foreach (var error in Errors)
+{
+    <div class="alert alert-danger">
+        @error.Code - @error.Description
+    </div>
+}
+<div>
+  <div class="form-group">
+    <label for="roleName">Role Name</label>
+    <input type="text" class="form-control" id="roleName" placeholder="Enter Role Name" @bind="RoleName">
+  </div>
+
+  <button type="submit" class="btn btn-primary" @onclick="CreateRole">Submit</button>
+</div>
+@code {
+    public string RoleName { get; set; }
+    public IEnumerable<IdentityError> Errors { get; set; } = new List<IdentityError>();
+
+    private async void CreateRole()
+    {
+        IdentityResult creation = await RoleService.CreateRole(RoleName);
+        if (!creation.Succeeded)
+        {
+            Errors = creation.Errors;
+        }
+        else
+        {
+            NavigationManager.NavigateTo("../Role/");
+        }
+    }
+
+}

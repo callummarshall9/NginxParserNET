@@ -1,0 +1,33 @@
+@using NginxParser.Entities
+    <hr />
+    <h4>Properties</h4>
+    <button class="btn btn-secondary float-right" @onclick="(e => AddProperty(Properties))">Add new property</button>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Value</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var property in Properties)
+        {
+            <tr>
+                <td><input class="form-control" @bind="property.Key" /></td>
+                <td><input class="form-control" @bind="property.Value" /></td>
+                <td>
+                    <button class="btn btn-danger" @onclick="(e => RemoveProperty(Properties, property))">Remove</button>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+@code {
+    [Parameter]
+    public List<PropertyEntry> Properties { get; set; }
+    
+    private void AddProperty(List<PropertyEntry> properties) => properties.Add(new ());
+
+    private void RemoveProperty(List<PropertyEntry> properties, PropertyEntry property) => properties.Remove(property);
+}

@@ -1,0 +1,35 @@
+@page "/NginxServer/Create"
+@using NginxGUI.Data
+@inject NavigationManager NavigationManager;
+@inject NginxService NginxService;
+<h3>Create Nginx Server</h3>
+@foreach (var error in Errors)
+{
+    <div class="alert alert-danger">@error.Code - @error.Description</div>
+}
+<div>
+    <div class="form-group">
+        <label for="roleName">Server Name</label>
+        <input type="text" class="form-control" id="serverName" placeholder="Enter Server Name Name" @bind="ServerName">
+    </div>
+  <button type="submit" class="btn btn-primary" @onclick="CreateServer">Submit</button>
+</div>
+@code {
+    public string ServerName { get; set; }
+    public List<NginxService.NginxError> Errors { get; set; } = new ();
+    
+
+    private void CreateServer(MouseEventArgs arg)
+    {
+        var createServerResult = NginxService.CreateNginxServerList(ServerName);
+        if (createServerResult.Succeeded) NavigationManager.NavigateTo("/NginxServer");
+        else
+        {
+            Errors.Clear();
+            Errors = createServerResult.Errors;
+        }
+    }
+
+    public FileBrowserModal ApplicationModal { get; set; }
+
+}

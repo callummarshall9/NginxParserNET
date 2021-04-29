@@ -1,0 +1,88 @@
+{
+  "version": 3,
+  "targets": {
+    "net5.0": {
+      "LinuxPrivilegeEscalation/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "compile": {
+          "bin/placeholder/LinuxPrivilegeEscalation.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/LinuxPrivilegeEscalation.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "LinuxPrivilegeEscalation/1.0.0": {
+      "type": "project",
+      "path": "../LinuxPrivilegeEscalation/LinuxPrivilegeEscalation.csproj",
+      "msbuildProject": "../LinuxPrivilegeEscalation/LinuxPrivilegeEscalation.csproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net5.0": [
+      "LinuxPrivilegeEscalation >= 1.0.0"
+    ]
+  },
+  "packageFolders": {
+    "/home/cmarshall/.nuget/packages/": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "/home/cmarshall/RiderProjects/NginxSolution/SystemdIntegration/SystemdIntegration.csproj",
+      "projectName": "SystemdIntegration",
+      "projectPath": "/home/cmarshall/RiderProjects/NginxSolution/SystemdIntegration/SystemdIntegration.csproj",
+      "packagesPath": "/home/cmarshall/.nuget/packages/",
+      "outputPath": "/home/cmarshall/RiderProjects/NginxSolution/SystemdIntegration/obj/",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "/home/cmarshall/.nuget/NuGet/NuGet.Config"
+      ],
+      "originalTargetFrameworks": [
+        "net5.0"
+      ],
+      "sources": {
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "projectReferences": {
+            "/home/cmarshall/RiderProjects/NginxSolution/LinuxPrivilegeEscalation/LinuxPrivilegeEscalation.csproj": {
+              "projectPath": "/home/cmarshall/RiderProjects/NginxSolution/LinuxPrivilegeEscalation/LinuxPrivilegeEscalation.csproj"
+            }
+          }
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      }
+    },
+    "frameworks": {
+      "net5.0": {
+        "targetAlias": "net5.0",
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "/usr/lib64/dotnet/sdk/5.0.202/RuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}

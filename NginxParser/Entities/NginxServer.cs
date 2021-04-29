@@ -20,7 +20,7 @@ namespace NginxParser.Entities
             Properties.ForEach(p => p.Build(stringBuilder));
             Locations.ForEach(l => l.Build(stringBuilder));
             UnsupportedTokens.ForEach(l => l.Build(stringBuilder));
-            LimitExcept.Build(stringBuilder);
+            LimitExcept?.Build(stringBuilder);
             stringBuilder.AppendLine("}");
         }
     }

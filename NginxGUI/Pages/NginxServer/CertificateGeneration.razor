@@ -1,0 +1,94 @@
+@using NginxGUI.Entities
+@using NginxParser.Entities
+@using NginxGUI.Data
+@using NginxGUI.Dtos
+@inject NginxService NginxService
+@inject NginxProxyManagementService NginxProxyManagementService
+<div class="modal @ModalClass" tabindex="-1" role="dialog" style="display:@ModalDisplay;">
+    <div class="modal-dialog" role="document" style="max-width: 1800px;max-height: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">@Title</h5>
+                <button type="button" class="close"  @onclick="Close" >
+                    <span aria-hidden="true">&times;</span>
+                </button>   
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="country">Country</label>
+                    <input name="country" class="form-control" type="text" @bind="CertificateForm.Country" />
+                </div>
+                <div class="form-group">
+                    <label for="state">State</label>
+                    <input name="state" class="form-control" type="text" @bind="CertificateForm.State" />
+                </div>
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <input name="city" class="form-control" type="text" @bind="CertificateForm.City" />
+                </div>
+                <div class="form-group">
+                    <label for="organisation">Organisation</label>
+                    <input name="organisation" class="form-control" type="text" @bind="CertificateForm.Organisation" />
+                </div>
+                <div class="form-group">
+                    <label for="department">Department</label>
+                    <input name="department" class="form-control" type="text" @bind="CertificateForm.Department" />
+                </div>
+                <div class="form-group">
+                    <label for="commonName">Common Name</label>
+                    <input name="commonName" class="form-control" type="text" @bind="CertificateForm.CommonName" />
+                </div>
+                <div class="form-group">
+                    <label for="emailAddress">Email Address</label>
+                    <input name="emailAddress" class="form-control" type="text" @bind="CertificateForm.EmailAddress" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="Close">Request</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@if (ShowBackdrop)
+{
+    <div class="modal-backdrop fade show"></div>
+}
+
+
+@code {
+
+    public string ModalDisplay = "none;";
+    public string ModalClass = "";
+    public bool ShowBackdrop = false;
+    
+    public CertificateRequestForm CertificateForm { get; set; }
+
+    [Parameter]
+    public Action<NginxServer, CertificateRequestForm> ChooseActionModal { get; set; }
+    
+    [Parameter]
+    public NginxServer NginxServer { get; set; }
+    
+    [Parameter]
+    public string Title { get; set; }
+
+    public void Open()
+    {
+        CertificateForm = new CertificateRequestForm();
+        ModalDisplay = "block;";
+        ModalClass = "Show";
+        ShowBackdrop = true;
+        StateHasChanged();
+    }
+
+    public void Close()
+    {
+        ChooseActionModal(NginxServer, CertificateForm);
+        ModalDisplay = "none";
+        ModalClass = "";
+        ShowBackdrop = false;
+        StateHasChanged();
+    }
+}

@@ -1,0 +1,68 @@
+@page "/NginxProxyServiceManagement/Create"
+@using NginxGUI.Data
+@using NginxGUI.Dtos
+@inject NavigationManager NavigationManager
+@inject NginxService NginxService
+@inject NginxProxyManagementService NginxProxyManagementService
+<h3>Create Nginx Proxy Management Service</h3>
+@foreach (var error in Errors)
+{
+    <div class="alert alert-danger">
+        @error.Code - @error.Description
+    </div>
+}
+<div class="form-group">
+    <label for="nginxConfig">Nginx Config</label>
+    <select class="form-control" id="nginxConfig" @bind="CreateDtoModel.ProxyService.NginxFileName">
+        <option value="">Please select a entry</option>
+        @foreach (var entry in NginxEntries)
+        {
+            <option value="@entry.FileName">@entry.FileName</option>
+        }
+    </select>
+</div>
+
+<div class="form-group">
+    <label for="nginxConfig">Systemd Service Name</label>
+    <input type="text" class="form-control" @bind="CreateDtoModel.ProxyService.SystemdServiceName" />
+</div>
+
+<NginxGUI.Pages.NginxProxyServiceManagement.Templates.DotnetReverseProxy SystemdModel="SystemdService" />
+
+<div class="btn-group" role="group">
+  <button type="button" class="btn btn-primary" @onclick="() => CreateService(SystemdService)">Create</button>
+</div>
+@code {
+    CreateNginxProxyServiceDto CreateDtoModel = new ();
+    SystemdService SystemdService = new ();
+    List<NginxService.NginxEntry> NginxEntries { get; set; } = new ();
+    List<NginxService.NginxError> Errors { get; set; } = new ();
+
+    public async Task CreateService(SystemdService service)
+    {
+        CreateDtoModel.CreateTemplate = SystemdService.Build();
+        var creationResult = await NginxProxyManagementService.CreateNginxProxyServices(new List<CreateNginxProxyServiceDto>() {CreateDtoModel});
+        if (creationResult.Succeeded)
+        {
+            NavigationManager.NavigateTo("/NginxProxyServiceManagement/");
+        }
+        else
+        {
+            Errors.Clear();
+            Errors.AddRange(creationResult.Errors.Select(r => new NginxService.NginxError() {Code = r.Code, Description = r.Description}).ToArray());
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = NginxService.GetConfigs();
+        if (result.Succeeded)
+        {
+            NginxEntries = result.Result;
+        }
+        else
+        {
+            Errors = result.Errors;
+        }
+    }
+}

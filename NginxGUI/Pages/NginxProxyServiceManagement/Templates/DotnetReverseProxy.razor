@@ -1,0 +1,153 @@
+@using NginxGUI.Pages.NginxServer
+@using NginxGUI.Dtos
+<div>
+  <div class="form-group">
+    <label for="description">Description</label>
+    <input type="text" class="form-control" id="description" aria-describedby="description" placeholder="Enter Description" @bind="SystemdModel.Description">
+    <small id="description" class="form-text text-muted">Description of the service</small>
+  </div>
+  <div class="form-group">
+    <label for="workingDirectory">Working directory to start the app in</label>
+    <button class="btn btn-primary" @onclick="(e => WorkingDirectoryModal.Open())">Browse</button>
+    <label>@SystemdModel.WorkingDirectory</label>
+    <FileBrowserModal Path="/" Title="Select folder" SelectFile="false" ChooseActionModal="(path) => SelectWorkingDirectory(path)" @ref="WorkingDirectoryModal" ></FileBrowserModal>
+    <small id="workingDirectory" class="form-text text-muted">Working directory to start the app in</small>
+  </div>
+  <div class="form-group">
+    <label for="applicationPath">.NET dll to act as startup project</label>
+    <button class="btn btn-primary" @onclick="(e => ApplicationModal.Open())">Browse</button>
+    <label>@SystemdModel.ExecStart</label>
+    <FileBrowserModal Path="/" Title="Select File" SelectFile="true" ChooseActionModal="(path) => SelectExecStart(path)" @ref="ApplicationModal" ></FileBrowserModal>
+    <small id="applicationPath" class="form-text text-muted">.NET dll to act as startup project</small>
+  </div>  
+  <div class="form-group">
+    <label for="restart">Restart</label>
+    <select class="form-control" id="restart" @bind="@SystemdModel.Restart">
+      <option value="no">No</option>
+      <option value="always">Always</option>
+      <option value="on-success">On-Success</option>
+      <option value="on-failure">On-Failure</option>
+      <option value="on-abnormal">On-Abnormal</option>
+      <option value="on-abort">On-Abort</option>
+      <option value="on-watchdog">On-Watchdog</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="restartSec">Restart after how many seconds</label>
+    <input type="text" class="form-control" id="restartSec" aria-describedby="restartSec" placeholder="Enter how many seconds to restart after" @bind="SystemdModel.RestartSec">
+    <small id="restartSec" class="form-text text-muted">Restart after how many seconds</small>
+  </div>
+  <div class="form-group">
+    <label for="killSignal">Kill Signal</label>
+    <select class="form-control" id="killSignal" @bind="@SystemdModel.KillSignal">
+      <option value="SIGABRT">SIGABRT - Abort signal</option>
+      <option value="SIGALRM">SIGALRM - Timer signal</option>
+      <option value="SIGBUS">SIGBUS - Bus Error</option>
+      <option value="SIGCHLD">SIGCHLD - Child stopped or terminated</option>
+      <option value="SIGCLD">SIGCLD - SIGCHLD (Child stopped or terminated)</option>
+      <option value="SIGCONT">SIGCONT - Continue if stopped</option>
+      <option value="SIGEMT">SIGEMT - Emulator trap</option>
+      <option value="SIGFPE">SIGFPE - Floating-point exception</option>
+      <option value="SIGHUP">SIGHUP - Hangup detected on controlling terminal or death of controlling process</option>
+      <option value="SIGILL">SIGILL - Illegal instruction</option>
+      <option value="SIGINFO">SIGINFO - A synonym for SIGPWR</option>
+      <option value="SIGINT">SIGINT - Interrupt from keyboard</option>
+      <option value="SIGIO">SIGIO - I/O now possible</option>
+      <option value="SIGIOT">SIGIOT - IOT trap. Synonym for SIGABRT</option>
+      <option value="SIGKILL">SIGKILL - Kill signal</option>
+      <option value="SIGLOST">SIGLOST - File lock lost (unused)</option>
+      <option value="SIGPIPE">SIGPIPE - Broken pipe; write to pipe with no readers</option>
+      <option value="SIGPOLL">SIGPOLL - Pollable event. Synonym for SIGIO</option>
+      <option value="SIGPROF">SIGPROF - Profiling timer expired</option>
+      <option value="SIGPWR">SIGPWR - Power failure</option>
+      <option value="SIGQUIT">SIGQUIT - Quit from keyboard</option>
+      <option value="SIGSEGV">SIGSEGV - Invalid memory reference</option>
+      <option value="SIGSTKFLT">SIGSTKFLT - Stack fault on coprocessor</option>
+      <option value="SIGSTOP">SIGSTOP - Stop process</option>
+      <option value="SIGTSTP">SIGTSTP - Stop typed at terminal</option>
+      <option value="SIGTSTP">SIGTSTP - Bad system call</option>
+      <option value="SIGTERM">SIGTERM - Termination signal</option>
+      <option value="SIGTRAP">SIGTRAP - Trace/breakpoint trap</option>
+      <option value="SIGTTIN">SIGTTIN - Terminal input for background process</option>
+      <option value="SIGTTOU">SIGTTOU - Terminal output for background process</option>
+      <option value="SIGUNUSED">SIGUNUSED - Synonymous of SIGSYS</option>
+      <option value="SIGURG">SIGURG - Urgent condition on socket</option>
+      <option value="SIGUSR1">SIGUSR1 - User-defined signal 1</option>
+      <option value="SIGUSR2">SIGUSR2 - User-defined signal 2</option>
+      <option value="SIGVTALRM">SIGVTALRM - Virtual alarm clock</option>
+      <option value="SIGXCPU">SIGXCPU - CPU time limit exceeded</option>
+      <option value="SIGXFSZ">SIGXFSZ - File size limit exceeeded</option>
+      <option value="SIGWINCH">SIGWINCH - Window resize signal</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="syslogIdentifier">Syslog Identifier</label>
+    <input type="text" class="form-control" id="syslogIdentifier" aria-describedby="syslogIdentifier" placeholder="Enter Syslog Identifier" @bind="SystemdModel.SyslogIdentifier">
+    <small id="syslogIdentifier" class="form-text text-muted">Syslog identifier</small>
+  </div>
+  <div class="form-group">
+    <label for="user">User</label>
+    <input type="text" class="form-control" id="user" aria-describedby="user" placeholder="Enter Username" @bind="SystemdModel.User">
+    <small id="user" class="form-text text-muted">User</small>
+  </div>
+  
+  <h5>Environment variables</h5>
+    <button class="btn btn-primary" @onclick="(e => SystemdModel.Environment.Add(string.Empty))">Add</button>
+
+  <table class="table">
+        <thead>
+        <tr>
+          <th>Environment variable</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @for (int i = 0; i < SystemdModel.Environment.Count; i++)
+        {
+          int copy = i;
+          <tr>
+            <td>
+              <input type="text" class="form-control" value="@SystemdModel.Environment[i]"
+                     @onchange="(e => EnvironmentValueChanged(copy, e.Value?.ToString()))">
+
+            </td>
+            <td>
+              <button class="btn btn-danger" @onclick="(e => SystemdModel.Environment.RemoveAt(i))">Delete</button>
+            </td>
+          </tr>
+        }
+        </tbody>
+    </table>
+  
+  <div class="form-group">
+    <label for="wantedBy">Wanted By (What depends on this)</label>
+    <input type="text" class="form-control" id="wantedBy" aria-describedby="user" placeholder="Enter systemd reference" @bind="SystemdModel.WantedBy">
+    <small id="wantedBy" class="form-text text-muted">Wanted By (what depends on this)</small>
+  </div>
+  
+</div>
+
+@code {
+  [Parameter] public SystemdService SystemdModel { get; set; }
+  FileBrowserModal WorkingDirectoryModal;
+  FileBrowserModal ApplicationModal;
+  int i = 0;
+
+  public void EnvironmentValueChanged(int i, string value)
+  {
+    SystemdModel.Environment[i] = value;
+    StateHasChanged();
+  }
+
+  public void SelectWorkingDirectory(string path)
+  {
+    SystemdModel.WorkingDirectory = path;
+    StateHasChanged();
+  }
+
+  public void SelectExecStart(string path)
+  {
+    SystemdModel.ExecStart = path;
+    StateHasChanged();
+  }
+}

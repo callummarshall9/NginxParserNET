@@ -1,0 +1,30 @@
+@using NginxGUI.Data
+@using NginxGUI.Entities
+@inject NginxProxyManagementService NginxProxyManagementService
+<h3>Service log viewer</h3>
+<div style="overflow: auto;max-height: 600px;height: 600px;">
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Log entry</th>
+        </tr>
+        </thead>
+        <tbody>
+        @if (SystemdService != null)
+        {
+            @foreach (var entry in SystemdService.JournalCtlLogs)
+            {
+                <tr>
+                    <td>@entry</td>
+                </tr>
+            }
+        }
+
+        </tbody>
+    </table>
+</div>
+@code {
+    [Parameter] public NginxProxyService SystemdService { get; set; }
+    
+    
+}

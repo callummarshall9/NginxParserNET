@@ -1,0 +1,12 @@
+NginxGUI/obj/*
+NginxGUI/bin/*
+SystemdIntegration/obj/*
+SystemdIntegration/bin/*
+NginxParser/obj/*
+NginxParser/bin/*
+SystemdIntegration.Tests/obj/*
+SystemdIntegration.Tests/bin/*
+NginxTests/bin/*
+NginxTests/obj/*
+NginxRazorGUI/bin/*
+NginxRazorGUI/obj/*

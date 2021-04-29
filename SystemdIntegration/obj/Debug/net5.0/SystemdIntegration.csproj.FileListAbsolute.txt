@@ -1,0 +1,15 @@
+/home/cmarshall/RiderProjects/NginxSolution/SystemdIntegration/bin/Debug/net5.0/SystemdIntegration.deps.json
+/home/cmarshall/RiderProjects/NginxSolution/SystemdIntegration/bin/Debug/net5.0/SystemdIntegration.dll
+/home/cmarshall/RiderProjects/NginxSolution/SystemdIntegration/bin/Debug/net5.0/ref/SystemdIntegration.dll
+/home/cmarshall/RiderProjects/NginxSolution/SystemdIntegration/bin/Debug/net5.0/SystemdIntegration.pdb
+/home/cmarshall/RiderProjects/NginxSolution/SystemdIntegration/obj/Debug/net5.0/SystemdIntegration.csprojAssemblyReference.cache
+/home/cmarshall/RiderProjects/NginxSolution/SystemdIntegration/obj/Debug/net5.0/SystemdIntegration.GeneratedMSBuildEditorConfig.editorconfig
+/home/cmarshall/RiderProjects/NginxSolution/SystemdIntegration/obj/Debug/net5.0/SystemdIntegration.AssemblyInfoInputs.cache
+/home/cmarshall/RiderProjects/NginxSolution/SystemdIntegration/obj/Debug/net5.0/SystemdIntegration.AssemblyInfo.cs
+/home/cmarshall/RiderProjects/NginxSolution/SystemdIntegration/obj/Debug/net5.0/SystemdIntegration.csproj.CoreCompileInputs.cache
+/home/cmarshall/RiderProjects/NginxSolution/SystemdIntegration/obj/Debug/net5.0/SystemdIntegration.dll
+/home/cmarshall/RiderProjects/NginxSolution/SystemdIntegration/obj/Debug/net5.0/ref/SystemdIntegration.dll
+/home/cmarshall/RiderProjects/NginxSolution/SystemdIntegration/obj/Debug/net5.0/SystemdIntegration.pdb
+/home/cmarshall/RiderProjects/NginxSolution/SystemdIntegration/bin/Debug/net5.0/LinuxPrivilegeEscalation.dll
+/home/cmarshall/RiderProjects/NginxSolution/SystemdIntegration/bin/Debug/net5.0/LinuxPrivilegeEscalation.pdb
+/home/cmarshall/RiderProjects/NginxSolution/SystemdIntegration/obj/Debug/net5.0/SystemdIntegration.csproj.CopyComplete

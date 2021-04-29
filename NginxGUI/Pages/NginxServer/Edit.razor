@@ -1,0 +1,114 @@
+@page "/NginxServer/Edit/{nginxConfigFileName}"
+@using NginxGUI.Data
+@using NginxGUI.Dtos
+@using NginxGUI.Entities
+@using NginxParser.Collections
+@using NginxParser.Entities
+@inject NginxService NginxService;
+@inject NginxProxyManagementService NginxProxyManagementService;
+@inject NavigationManager NavigationManager;
+
+<h3>Editing @NginxConfigFileName</h3>
+@if (Saved)
+{
+    <div class="alert alert-success">Saved</div>
+}
+@foreach (var error in Errors)
+{
+    <div class="alert alert-danger">@error.Code - @error.Description</div>
+}
+@if (ServerList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    @foreach (var server in ServerList)
+    {
+        <h4>Server</h4>
+        <div class="btn-group" role="group">
+            <button class="btn btn-primary float-right" @onclick="(e => AddLocation(server))">Add new location</button>
+            <button class="btn btn-primary float-right" @onclick="(e => AddCertificate(server))">Certificate request</button>
+        </div>
+        
+        <NginxProperties Properties="@server.Properties" />
+        @foreach (var location in server.Locations)
+        {
+            <div style="margin-left:20px;">
+                <h4>Location: <input type="text" class="form-control" @bind="location.Name" /></h4>
+                <button class="btn btn-primary float-right" @onclick="(e => AddProxy(location))">Add proxy</button>
+                <NginxProperties Properties="@location.Properties" />
+            </div>
+        }
+    }
+    <div class="float-right">
+        <button class="btn btn-primary" @onclick="UpdateConfig">Update</button>
+    </div>
+    <ProxyServiceLinker NginxConfigFileName="@NginxConfigFileName" Title="Select the type of proxy and the proxy you'd like to add" ChooseActionModal="AddProxyServiceToLocation" @ref="Linker" />
+    <CertificateGeneration Title="Fill in fields required for certificate generation" ChooseActionModal="CreateCertificate" @ref="CertificateGeneration" />
+}
+
+@code {
+    [Parameter]
+    public string NginxConfigFileName { get; set; }
+    public NginxServerList ServerList { get; set; }
+    public List<NginxService.NginxError> Errors { get; set; } = new ();
+    
+    public ProxyServiceLinker Linker { get; set; }
+    public CertificateGeneration CertificateGeneration { get; set; }
+
+    public bool Saved { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var parseResult = NginxService.ParseServerConfig(NginxConfigFileName);
+        if (parseResult.Succeeded)
+            ServerList = parseResult.Result;
+        else
+            Errors = parseResult.Errors;
+    }
+
+    private void AddProxyServiceToLocation(NginxLocation location, NginxProxyService proxyService, string type)
+    {
+        NginxProxyManagementService.GenerateMissingProxyUrls(proxyService); //Generate missing proxy service urls if they don't exist.
+        foreach (var proxyUrl in NginxProxyManagementService.GetProxyUrls(proxyService).Result)
+        {
+            if (type == "WebSocket")
+                NginxProxyManagementService.LinkLocationToWebSocket(proxyUrl, proxyService.SystemdServiceName, location);
+            else
+                NginxProxyManagementService.LinkLocationToProxy(proxyUrl, proxyService.SystemdServiceName, location);
+        }
+        StateHasChanged();
+    }
+
+    private void AddProxy(NginxLocation location)
+    {
+        Linker.NginxLocation = location;
+        Linker.Open();
+    }
+
+    private void CreateCertificate(NginxServer server, CertificateRequestForm requestForm)
+    {
+        NginxService.CreateCertificate(server, requestForm);
+        StateHasChanged();
+    }
+    
+    private void AddCertificate(NginxServer server)
+    {
+        CertificateGeneration.NginxServer = server;
+        CertificateGeneration.Open();
+    }
+
+    private void AddLocation(NginxServer server) => server.Locations.Add(new ());
+
+    private void UpdateConfig()
+    {
+        var saveResult = NginxService.UpdateNginxConfig(NginxConfigFileName, ServerList);
+        Saved = saveResult.Succeeded;
+        if (!saveResult.Succeeded)
+            Errors = saveResult.Errors;
+        else
+            Errors = new List<NginxService.NginxError>();
+    }
+
+}

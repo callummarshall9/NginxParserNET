@@ -1,0 +1,69 @@
+<div class="modal @ModalClass" tabindex="-1" role="dialog" style="display:@ModalDisplay;">
+    <div class="modal-dialog" role="document" style="max-width: 800px;max-height: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">@Title</h5>
+                <button type="button" class="close"  @onclick="() => ChosenModal(null)" >
+                    <span aria-hidden="true">&times;</span>
+                </button>   
+            </div>
+            <div class="modal-body">
+                <FileBrowser Path="@Path" SelectFile="@SelectFile" ChooseAction="(path) => ChosenModal(path)" @ref="FileBrowser"></FileBrowser>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="() => ChosenModal(null)">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@if (ShowBackdrop)
+{
+    <div class="modal-backdrop fade show"></div>
+}
+
+
+@code {
+
+    public string ModalDisplay = "none;";
+    public string ModalClass = "";
+    public bool ShowBackdrop = false;
+
+    public FileBrowser FileBrowser;
+    
+    [Parameter]
+    public Action<string> ChooseActionModal { get; set; }
+
+    [Parameter]
+    public  string Title { get; set; }
+    
+    [Parameter]
+    public string Path { get; set; }
+    [Parameter]
+    public bool SelectFile { get; set; }
+    [Parameter]
+    public Action<string> ChooseAction { get; set; }
+    
+    public void ChosenModal(string path)
+    {   
+        Close();
+        ChooseActionModal(path);
+        StateHasChanged();
+    }
+
+    public void Open()
+    {
+        ModalDisplay = "block;";
+        ModalClass = "Show";
+        ShowBackdrop = true;
+        FileBrowser.LoadPath("/");
+    }
+
+    public void Close()
+    {
+        ModalDisplay = "none";
+        ModalClass = "";
+        ShowBackdrop = false;
+    }
+}

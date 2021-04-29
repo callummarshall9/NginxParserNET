@@ -1,0 +1,84 @@
+@using NginxGUI.Entities
+@using NginxParser.Entities
+@using NginxGUI.Data
+@inject NginxService NginxService
+@inject NginxProxyManagementService NginxProxyManagementService
+<div class="modal @ModalClass" tabindex="-1" role="dialog" style="display:@ModalDisplay;">
+    <div class="modal-dialog" role="document" style="max-width: 1800px;max-height: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">@Title</h5>
+                <button type="button" class="close"  @onclick="Close" >
+                    <span aria-hidden="true">&times;</span>
+                </button>   
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="nginxProxyService">Nginx Proxy Service</label>
+                    <select class="form-control" @bind="ProxyService" name="nginxProxyService">
+                        <option value="" selected>Select one</option>
+                        @foreach (var entry in NginxProxyManagementService.GetProxyServices(NginxConfigFileName).Result.Result)
+                        {
+                            <option value="@entry.SystemdServiceName">@entry.SystemdServiceName</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="proxyServiceType">Proxy Service Type</label>
+                    <select class="form-control" @bind="ProxyServiceType" name="proxyServiceType">
+                        <option value="WebSocket">Web Sockets</option>
+                        <option value="ReverseProxy">Reverse Proxy</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="Close">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@if (ShowBackdrop)
+{
+    <div class="modal-backdrop fade show"></div>
+}
+
+
+@code {
+
+    public string ModalDisplay = "none;";
+    public string ModalClass = "";
+    public bool ShowBackdrop = false;
+
+    [Parameter]
+    public Action<NginxLocation, NginxProxyService, string> ChooseActionModal { get; set; }
+    public string ProxyService { get; set; }
+    [Parameter]
+    public string NginxConfigFileName { get; set; }
+    [Parameter]
+    public NginxLocation NginxLocation { get; set; }
+    
+    public string ProxyServiceType { get; set; }
+    
+    [Parameter]
+    public string Title { get; set; }
+
+    public void Open()
+    {
+        ModalDisplay = "block;";
+        ModalClass = "Show";
+        ShowBackdrop = true;
+        StateHasChanged();
+    }
+
+    public void Close()
+    {
+        var services = NginxProxyManagementService.GetProxyServices(NginxConfigFileName).Result.Result;
+        ChooseActionModal(NginxLocation, services.FirstOrDefault(s => s.SystemdServiceName == ProxyService), ProxyServiceType);
+        ModalDisplay = "none";
+        ModalClass = "";
+        ShowBackdrop = false;
+        StateHasChanged();
+    }
+}

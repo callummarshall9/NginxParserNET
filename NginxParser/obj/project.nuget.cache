@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ErSE0kk5g4bVSKjot1Yi0/nqDo6udxPxxD+AFXLqfC52RqUCa9MrDOBnfpqpy3KnQHZMNwp+cax2roBc83ohiw==",
+  "dgSpecHash": "u6qpN4az6nGlS2+W4fIBbtewVxmwzCRJlPAcjsVdzbr2f/t1M2rHi1wkXfDi2/J09aYV8NvvGKUkYC/xMFHpbg==",
   "success": true,
-  "projectFilePath": "/home/callum/RiderProjects/NginxSolution/NginxParser/NginxParser.csproj",
+  "projectFilePath": "/home/cmarshall/RiderProjects/NginxSolution/NginxParser/NginxParser.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

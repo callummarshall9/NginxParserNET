@@ -1,0 +1,66 @@
+@page "/Role/"
+@using NginxGUI.Data
+@using Microsoft.AspNetCore.Identity
+@inject RoleService RoleService
+@inject NavigationManager NavigationManager
+
+<h3>Roles</h3>
+<button class="btn btn-primary" @onclick="@(e => NavigationManager.NavigateTo($"/Role/Create"))">Create</button>
+@foreach (var error in Errors)
+{
+    <div class="alert alert-danger">
+        @error.Code - @error.Description
+    </div>
+}
+@if (Roles == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var role in Roles)
+        {
+            <tr>
+                <td>@role.Name</td>
+                <td>
+                    <button class="btn btn-secondary" @onclick="@(e => NavigationManager.NavigateTo($"/Role/Edit/{role.Id}"))">Edit</button>
+                    <button class="btn btn-danger" @onclick="@(e => Delete(role))">Delete</button>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+@code {
+        
+    private List<IdentityRole> Roles;
+    public IEnumerable<IdentityError> Errors { get; set; } = new List<IdentityError>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Roles = RoleService.GetRoles();
+    }
+    
+    private async void Delete(IdentityRole role)
+    {
+        var result = await RoleService.DeleteRole(role.Id);
+        if (!result.Succeeded)
+        {
+            Errors = result.Errors;
+        }
+        else
+        {
+            Roles = RoleService.GetRoles();
+        }
+    }
+}

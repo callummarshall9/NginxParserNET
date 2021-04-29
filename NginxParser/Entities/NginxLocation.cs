@@ -13,7 +13,7 @@ namespace NginxParser.Entities
         }
         public override void Build(StringBuilder stringBuilder)
         {
-            stringBuilder.AppendLine($"{Name} {{");
+            stringBuilder.AppendLine($"location {Name} {{");
             Properties.ForEach(p => p.Build(stringBuilder));
             Locations.ForEach(p => p.Build(stringBuilder));
             stringBuilder.AppendLine("}");

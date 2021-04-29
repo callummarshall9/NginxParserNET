@@ -1,0 +1,114 @@
+@page "/NginxProxyServiceManagement/"
+@using NginxGUI.Data
+@using NginxGUI.Entities
+@inject NavigationManager NavigationManager;
+@inject NginxProxyManagementService NginxProxyManagementService;
+@inject NginxService NginxService;
+<h3>Nginx Proxy Service Management</h3>
+<button class="btn btn-primary" @onclick="@(e => NavigationManager.NavigateTo($"/NginxProxyServiceManagement/Create"))">Create</button>
+<button class="btn btn-danger" @onclick="@(e => NginxProxyManagementService.ReloadDaemon())">Reload Daemon</button>
+
+@foreach (var error in Errors)
+{
+    <div class="alert alert-danger">
+        @error.Code - @error.Description
+    </div>
+}
+<table class="table">
+    <thead>
+    <tr>
+        <th>Nginx Config</th>
+        <th>Systemd Service</th>
+        <th>Enabled on Startup</th>
+        <th>Service active</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var entry in ProxyServices)
+    {
+        <tr>
+            <td>@entry.NginxFileName</td>
+            <td>@entry.SystemdServiceName</td>
+            <td>@(entry.EnabledOnStartup ? "Enabled on startup" : "Not enabled")</td>
+            <td>@(entry.IsActive ? "Running" : "Inactive")</td>
+            <td>
+                @if (entry.EnabledOnStartup)
+                {
+                    <button class="btn btn-secondary" @onclick="(e => DisableSystemdTask(entry.SystemdServiceName))">Disable</button>
+                }
+                else
+                {
+                    <button class="btn btn-secondary" @onclick="(e => EnableSystemdTask(entry.SystemdServiceName))">Enable start on startup</button>
+                }
+                @if (entry.IsActive)
+                {
+                    <button class="btn btn-warning" @onclick="(e => StopSystemdTask(entry.SystemdServiceName))">Stop</button>
+                }
+                else
+                {
+                    <button class="btn btn-warning" @onclick="(e => StartSystemdTask(entry.SystemdServiceName))">Start</button>
+
+                }
+                <button class="btn btn-secondary" @onclick="(e => ViewLogs(entry))">View Logs</button>
+                <button class="btn btn-danger" @onclick="(e => Delete(entry))">Delete</button>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+<LogViewerModal Title="View Logs" @ref="LogViewerModal"/>
+@code 
+{
+    public List<NginxProxyService> ProxyServices { get; set; } = new ();
+    public List<NginxProxyManagementService.NginxProxyManagementError> Errors { get; set; } = new();
+
+    public LogViewerModal LogViewerModal;
+
+    public void ViewLogs(NginxProxyService proxyService)
+    {
+        LogViewerModal.ProxyService = proxyService;
+        LogViewerModal.Open();
+    }
+
+    public async Task Delete(NginxProxyService proxyService)
+    {
+        var result = await NginxProxyManagementService.DeleteProxyServices(proxyService.NginxFileName, proxyService.SystemdServiceName);
+        if (!result.Succeeded)
+        {
+            Errors = result.Errors;
+        } else 
+            Refresh();
+        
+    }
+
+    public void EnableSystemdTask(string systemdService) => NginxProxyManagementService.EnableProxyServiceOnStartup(systemdService);
+    public void DisableSystemdTask(string systemdService) => NginxProxyManagementService.DisableProxyServiceOnStartup(systemdService);
+    public void StartSystemdTask(string systemdService) => NginxProxyManagementService.StartProxyService(systemdService);
+    public void StopSystemdTask(string systemdService) => NginxProxyManagementService.StopProxyService(systemdService);
+
+
+    private void Refresh()
+    {
+        var fileNamesResult = NginxService.GetConfigs();
+        if (fileNamesResult.Succeeded)
+        {
+            var results = fileNamesResult.Result.Select(r => r.FileName).ToArray();
+            ProxyServices = results.SelectMany(f => NginxProxyManagementService.GetProxyServices(f)?.Result?.Result).ToList();
+        }
+        else
+        {
+            Errors = fileNamesResult.Errors.Select(e => new NginxProxyManagementService.NginxProxyManagementError
+            {
+                Code = e.Code,
+                Description = e.Description
+            }).ToList();
+        }
+        StateHasChanged();
+    }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        Refresh();
+    }
+}

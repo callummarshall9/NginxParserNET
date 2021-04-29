@@ -1,0 +1,12 @@
+/home/cmarshall/RiderProjects/NginxSolution/LinuxPrivilegeEscalation/bin/Debug/net5.0/LinuxPrivilegeEscalation.deps.json
+/home/cmarshall/RiderProjects/NginxSolution/LinuxPrivilegeEscalation/bin/Debug/net5.0/LinuxPrivilegeEscalation.dll
+/home/cmarshall/RiderProjects/NginxSolution/LinuxPrivilegeEscalation/bin/Debug/net5.0/ref/LinuxPrivilegeEscalation.dll
+/home/cmarshall/RiderProjects/NginxSolution/LinuxPrivilegeEscalation/bin/Debug/net5.0/LinuxPrivilegeEscalation.pdb
+/home/cmarshall/RiderProjects/NginxSolution/LinuxPrivilegeEscalation/obj/Debug/net5.0/LinuxPrivilegeEscalation.csprojAssemblyReference.cache
+/home/cmarshall/RiderProjects/NginxSolution/LinuxPrivilegeEscalation/obj/Debug/net5.0/LinuxPrivilegeEscalation.GeneratedMSBuildEditorConfig.editorconfig
+/home/cmarshall/RiderProjects/NginxSolution/LinuxPrivilegeEscalation/obj/Debug/net5.0/LinuxPrivilegeEscalation.AssemblyInfoInputs.cache
+/home/cmarshall/RiderProjects/NginxSolution/LinuxPrivilegeEscalation/obj/Debug/net5.0/LinuxPrivilegeEscalation.AssemblyInfo.cs
+/home/cmarshall/RiderProjects/NginxSolution/LinuxPrivilegeEscalation/obj/Debug/net5.0/LinuxPrivilegeEscalation.csproj.CoreCompileInputs.cache
+/home/cmarshall/RiderProjects/NginxSolution/LinuxPrivilegeEscalation/obj/Debug/net5.0/LinuxPrivilegeEscalation.dll
+/home/cmarshall/RiderProjects/NginxSolution/LinuxPrivilegeEscalation/obj/Debug/net5.0/ref/LinuxPrivilegeEscalation.dll
+/home/cmarshall/RiderProjects/NginxSolution/LinuxPrivilegeEscalation/obj/Debug/net5.0/LinuxPrivilegeEscalation.pdb

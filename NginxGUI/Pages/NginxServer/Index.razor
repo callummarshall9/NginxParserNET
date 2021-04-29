@@ -1,0 +1,79 @@
+@page "/NginxServer/"
+@using NginxGUI.Data
+@using NginxParser.Entities
+@inject NginxService NginxService
+@inject NavigationManager NavigationManager
+
+<h3>Nginx Servers</h3>
+<button class="btn btn-primary" @onclick="@(e => NavigationManager.NavigateTo($"/NginxServer/Create"))">Create</button>
+<button class="btn btn-danger" @onclick="@(e => NginxService.ReloadNginx())">Reload</button>
+
+@foreach (var error in Errors)
+{
+    <div class="alert alert-danger">
+        @error.Code - @error.Description
+    </div>
+}
+@if (ServerConfigList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Server Name</th>
+            <th>Listen Address</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var entry in ServerConfigList)
+        {
+            @foreach (var server in ServerConfigList.SelectMany(sc => sc.ServerList))
+            {
+                <tr>
+                    <td>@entry.FileName</td>
+                    <td>@server.Properties.FirstOrDefault(prop => prop.Key == "server_name")?.Value</td>
+                    <td>@server.Properties.FirstOrDefault(prop => prop.Key == "listen")?.Value</td>
+                    <td>
+                        <button class="btn btn-secondary" @onclick="@(e => NavigationManager.NavigateTo($"/NginxServer/Edit/{entry.FileName}"))">Edit</button>
+                        <button class="btn btn-danger" @onclick="@(e => DeleteNginxServer(entry.FileName, entry, server))">Delete</button>
+                    </td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+}
+@code {
+
+    private List<NginxService.NginxEntry> ServerConfigList;
+    public IEnumerable<NginxService.NginxError> Errors { get; set; } = new List<NginxService.NginxError>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = NginxService.GetConfigs();
+        if (result.Succeeded)
+            ServerConfigList = result.Result;
+        else
+            Errors = result.Errors;
+    }
+    
+    private void DeleteNginxServer(string fileName, NginxService.NginxEntry collection, NginxServer server)
+    {
+        var result = NginxService.DeleteNginxServer(fileName, collection, server);
+        if (result.Succeeded)
+        {
+            var serverConfigResult = NginxService.GetConfigs();
+            if (serverConfigResult.Succeeded)
+                ServerConfigList = serverConfigResult.Result;
+            else
+                Errors = serverConfigResult.Errors;
+        }
+        else
+            Errors = result.Errors;
+    }
+}

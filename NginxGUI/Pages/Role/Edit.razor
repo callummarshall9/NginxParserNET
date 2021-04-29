@@ -1,0 +1,61 @@
+@page "/Role/Edit/{roleId}"
+@using Microsoft.AspNetCore.Identity
+@using NginxGUI.Data
+@using NginxGUI.Dtos
+@inject RoleService RoleService
+@inject NavigationManager NavigationManager;
+<h3>Edit</h3>
+@foreach (var error in Errors)
+{
+    <div class="alert alert-danger">
+        @error.Code - @error.Description
+    </div>
+}
+@if (Model != null)
+{
+    <div>
+        <div class="form-group">
+            <label for="roleName">Role Name</label>
+            <input type="text" class="form-control" id="roleName" placeholder="Enter Role Name" @bind="Model.RoleName">
+        </div>
+    <table class="table table-bordered table-sm">
+            @foreach(var user in Model.Users)
+            {
+                <tr>
+                    <td>@user.UserName</td>
+                    <td>
+                        <input type="checkbox" @bind="@user.InRole" >
+                    </td>
+                </tr>
+            }
+    </table>
+        <button type="submit" class="btn btn-primary" @onclick="UpdateRole">Submit</button>
+    </div>
+}
+@code {
+    [Parameter]
+    public string RoleId { get; set; }
+    
+    public IList<IdentityError> Errors { get; set; } = new List<IdentityError>();
+    
+    private UpdateRoleDto Model { get; set; }
+
+    private async void UpdateRole()
+    {
+        var results = await RoleService.UpdateRole(Model);
+        if (results.Any(r => !r.Succeeded))
+        {
+            Errors.Clear();
+            results.Where(r => !r.Succeeded).SelectMany(r => r.Errors).ToList().ForEach(r => Errors.Add(r));
+        }
+        else
+        {
+            NavigationManager.NavigateTo("../Role/");
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Model = await RoleService.GetRoleUsers(RoleId);
+    }
+}

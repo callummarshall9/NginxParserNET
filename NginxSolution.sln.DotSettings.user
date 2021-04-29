@@ -1,4 +1,12 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=bf666076_002Dbc6e_002D447f_002D9fa5_002D3a15e18394bd/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;NginxTests&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;Project Location="C:\Users\Callum\Documents\NginxSolution\NginxTests" Presentation="&amp;lt;NginxTests&amp;gt;" /&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=bf666076_002Dbc6e_002D447f_002D9fa5_002D3a15e18394bd/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;NginxTests&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Or&gt;
+    &lt;TestAncestor&gt;
+      &lt;TestId&gt;NUnit3x::4CAE4ADC-21CD-4C79-A533-D7A8E17E1AC0::.NETCoreApp,Version=v3.1::NginxTests.NginxBuilderTests&lt;/TestId&gt;
+      &lt;TestId&gt;NUnit3x::4CAE4ADC-21CD-4C79-A533-D7A8E17E1AC0::.NETCoreApp,Version=v3.1::NginxTests.NginxParserTests&lt;/TestId&gt;
+      &lt;TestId&gt;NUnit3x::4CAE4ADC-21CD-4C79-A533-D7A8E17E1AC0::.NETCoreApp,Version=v3.1::NginxTests.NginxTokenizerTests&lt;/TestId&gt;
+      &lt;TestId&gt;NUnit3x::9A801494-9CF5-41C5-A004-8F07A0B8A479::net5.0::SystemdIntegration.Tests.Tests.CupsEnabled&lt;/TestId&gt;
+    &lt;/TestAncestor&gt;
+    &lt;Project Location="/home/cmarshall/RiderProjects/NginxSolution/SystemdIntegration.Tests" Presentation="&amp;lt;SystemdIntegration.Tests&amp;gt;" /&gt;
+  &lt;/Or&gt;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

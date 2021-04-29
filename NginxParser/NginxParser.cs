@@ -10,7 +10,7 @@ namespace NginxParser
     {
         static NginxLocation ParseLocationToken(TokenEntry locationToken)
         {
-            var location = new NginxLocation {Name = locationToken.Name};
+            var location = new NginxLocation {Name = locationToken.Name.Replace("location ", "")};
             location.ParseProperties(locationToken.Content);
             if (locationToken.Tokens.Any())
             {

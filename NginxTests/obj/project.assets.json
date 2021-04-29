@@ -4639,19 +4639,19 @@
     ]
   },
   "packageFolders": {
-    "/home/callum/.nuget/packages/": {}
+    "/home/cmarshall/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/callum/RiderProjects/NginxSolution/NginxTests/NginxTests.csproj",
+      "projectUniqueName": "/home/cmarshall/RiderProjects/NginxSolution/NginxTests/NginxTests.csproj",
       "projectName": "NginxTests",
-      "projectPath": "/home/callum/RiderProjects/NginxSolution/NginxTests/NginxTests.csproj",
-      "packagesPath": "/home/callum/.nuget/packages/",
-      "outputPath": "/home/callum/RiderProjects/NginxSolution/NginxTests/obj/",
+      "projectPath": "/home/cmarshall/RiderProjects/NginxSolution/NginxTests/NginxTests.csproj",
+      "packagesPath": "/home/cmarshall/.nuget/packages/",
+      "outputPath": "/home/cmarshall/RiderProjects/NginxSolution/NginxTests/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/callum/.nuget/NuGet/NuGet.Config"
+        "/home/cmarshall/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp3.1"
@@ -4661,9 +4661,10 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "projectReferences": {
-            "/home/callum/RiderProjects/NginxSolution/NginxParser/NginxParser.csproj": {
-              "projectPath": "/home/callum/RiderProjects/NginxSolution/NginxParser/NginxParser.csproj"
+            "/home/cmarshall/RiderProjects/NginxSolution/NginxParser/NginxParser.csproj": {
+              "projectPath": "/home/cmarshall/RiderProjects/NginxSolution/NginxParser/NginxParser.csproj"
             }
           }
         }
@@ -4676,6 +4677,7 @@
     },
     "frameworks": {
       "netcoreapp3.1": {
+        "targetAlias": "netcoreapp3.1",
         "dependencies": {
           "Microsoft.NET.Test.Sdk": {
             "target": "Package",
@@ -4705,7 +4707,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/lib64/dotnet/sdk/3.1.109/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/lib64/dotnet/sdk/5.0.202/RuntimeIdentifierGraph.json"
       }
     }
   }
