@@ -5,8 +5,10 @@
 @inject NavigationManager NavigationManager
 
 <h3>Nginx Servers</h3>
-<button class="btn btn-primary" @onclick="@(e => NavigationManager.NavigateTo($"/NginxServer/Create"))">Create</button>
-<button class="btn btn-danger" @onclick="@(e => NginxService.ReloadNginx())">Reload</button>
+<div class="btn btn-group" role="group">
+    <button class="btn btn-primary" @onclick="@(e => NavigationManager.NavigateTo($"/NginxServer/Create"))">Create</button>
+    <button class="btn btn-danger" @onclick="@(e => NginxService.ReloadNginx())">Reload</button>
+</div>
 
 @foreach (var error in Errors)
 {
@@ -39,8 +41,10 @@ else
                     <td>@server.Properties.FirstOrDefault(prop => prop.Key == "server_name")?.Value</td>
                     <td>@server.Properties.FirstOrDefault(prop => prop.Key == "listen")?.Value</td>
                     <td>
-                        <button class="btn btn-secondary" @onclick="@(e => NavigationManager.NavigateTo($"/NginxServer/Edit/{entry.FileName}"))">Edit</button>
-                        <button class="btn btn-danger" @onclick="@(e => DeleteNginxServer(entry.FileName, entry, server))">Delete</button>
+                        <div class="btn btn-group" role="group">
+                            <button class="btn btn-secondary" @onclick="@(e => NavigationManager.NavigateTo($"/NginxServer/Edit/{entry.FileName}"))">Edit</button>
+                            <button class="btn btn-danger" @onclick="@(e => DeleteNginxServer(entry.FileName, entry, server))">Delete</button>    
+                        </div>
                     </td>
                 </tr>
             }

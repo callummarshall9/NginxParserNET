@@ -62,8 +62,8 @@
     public string ModalDisplay = "none;";
     public string ModalClass = "";
     public bool ShowBackdrop = false;
-    
-    public CertificateRequestForm CertificateForm { get; set; }
+
+    public CertificateRequestForm CertificateForm { get; set; } = new();
 
     [Parameter]
     public Action<NginxServer, CertificateRequestForm> ChooseActionModal { get; set; }

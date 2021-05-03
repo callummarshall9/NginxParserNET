@@ -1,0 +1,56 @@
+@page "/NginxProxyServiceManagement/Edit/{systemdConfigFileName}"
+@using NginxGUI.Data
+@using NginxGUI.Dtos
+@inject NavigationManager NavigationManager
+@inject NginxProxyManagementService NginxProxyManagementService
+<h3>Edit Nginx Proxy Management Service</h3>
+@if (Saved)
+{
+    <div class="alert alert-success">Saved</div>
+}
+@foreach (var error in Errors)
+{
+    <div class="alert alert-danger">@error.Code - @error.Description</div>
+}
+<div class="form-group">
+    <label for="nginxConfig">Systemd Service Name</label>
+    <input type="text" class="form-control" @bind="NewSystemdConfigFileName" />
+</div>
+
+<NginxGUI.Pages.NginxProxyServiceManagement.Templates.DotnetReverseProxy SystemdModel="SystemdService" />
+<button type="submit" class="btn btn-primary" @onclick="UpdateService">Submit</button>
+@code {
+    [Parameter]
+    public string SystemdConfigFileName { get; set; }
+    
+    public string NewSystemdConfigFileName { get; set; }
+    
+    public bool Saved { get; set; }
+    
+    SystemdService SystemdService = new();
+    List<NginxProxyManagementService.NginxProxyManagementError> Errors { get; set; } = new ();
+
+    private void UpdateService()
+    {
+        var result = NginxProxyManagementService.UpdateSystemdService(SystemdConfigFileName, NewSystemdConfigFileName, SystemdService);
+        Saved = result.Succeeded;
+        if(!result.Succeeded)
+        {
+            Errors = result.Errors;
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        NewSystemdConfigFileName = SystemdConfigFileName;
+        var result = NginxProxyManagementService.GetSystemdService(SystemdConfigFileName);
+        if (result.Succeeded)
+        {
+            SystemdService = result.Result;
+        }
+        else
+        {
+            Errors = result.Errors;
+        }
+    }
+}

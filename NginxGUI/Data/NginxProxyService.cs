@@ -62,6 +62,64 @@ namespace NginxGUI.Data
             };
         }
 
+        public string GetPropertyValue(string key, string[] lines)
+        {
+            var matchingLine = lines.FirstOrDefault(l => l.StartsWith(key));
+            return matchingLine?.Substring(matchingLine.IndexOf("=", StringComparison.Ordinal) + 1);
+        }
+        
+        public string[] GetPropertyValues(string key, string[] lines)
+        {
+            var matchingLine = lines.Where(l => l.StartsWith(key));
+            return matchingLine.Select(l => l.Substring(l.IndexOf("=", StringComparison.Ordinal) + 1)).ToArray();
+        }
+
+        public NginxProxyManagementResult<SystemdService> UpdateSystemdService(string oldServiceName, string serviceName, SystemdService systemdService)
+        {
+            try
+            {
+                File.Delete($"{_systemdTargetDirectory}/{oldServiceName}");
+                File.WriteAllText($"{_systemdTargetDirectory}/{serviceName}", systemdService.Build());
+                return new NginxProxyManagementResult<SystemdService>
+                {
+                    Succeeded = true,
+                    Result = systemdService
+                };
+            }
+            catch (Exception ex)
+            {
+                return Exception<SystemdService>(ex);
+            }
+        }
+
+        public NginxProxyManagementResult<SystemdService> GetSystemdService(string serviceName)
+        {
+            try
+            {
+                var systemdServiceLines = File.ReadAllLines($"{_systemdTargetDirectory}/{serviceName}");
+                return new NginxProxyManagementResult<SystemdService>
+                {
+                    Succeeded = true,
+                    Result = new ()
+                    {
+                        Description = GetPropertyValue("Description", systemdServiceLines),
+                        WorkingDirectory = GetPropertyValue("WorkingDirectory", systemdServiceLines), 
+                        ExecStart = GetPropertyValue("ExecStart", systemdServiceLines),
+                        Restart = GetPropertyValue("Restart", systemdServiceLines),
+                        RestartSec = GetPropertyValue("RestartSec", systemdServiceLines),
+                        KillSignal = GetPropertyValue("KillSignal", systemdServiceLines),
+                        SyslogIdentifier = GetPropertyValue("SyslogIdentifier", systemdServiceLines), 
+                        User = GetPropertyValue("User", systemdServiceLines),
+                        Environment = GetPropertyValues("Environment", systemdServiceLines).ToList()
+                    }
+                };
+            }
+            catch (Exception ex)
+            {
+                return Exception<SystemdService>(ex);
+            }
+        }
+
         public async Task<NginxProxyManagementResult<IList<NginxProxyService>>> CreateNginxProxyServices(IList<CreateNginxProxyServiceDto> services)
         {
             try

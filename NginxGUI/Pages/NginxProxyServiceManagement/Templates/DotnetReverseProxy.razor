@@ -1,5 +1,6 @@
 @using NginxGUI.Pages.NginxServer
 @using NginxGUI.Dtos
+
 <div>
   <div class="form-group">
     <label for="description">Description</label>
@@ -92,7 +93,7 @@
   </div>
   
   <h5>Environment variables</h5>
-    <button class="btn btn-primary" @onclick="(e => SystemdModel.Environment.Add(string.Empty))">Add</button>
+  <button class="btn btn-primary" @onclick="(e => SystemdModel.Environment.Add(string.Empty))">Add</button>
 
   <table class="table">
         <thead>
@@ -124,7 +125,6 @@
     <input type="text" class="form-control" id="wantedBy" aria-describedby="user" placeholder="Enter systemd reference" @bind="SystemdModel.WantedBy">
     <small id="wantedBy" class="form-text text-muted">Wanted By (what depends on this)</small>
   </div>
-  
 </div>
 
 @code {

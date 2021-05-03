@@ -62,7 +62,19 @@ namespace NginxGUI.Data
 
         public NginxResult<T> Exception<T>(Exception ex) where T: class
         {
-            return (NginxResult<T>) Exception(ex);
+            return new()
+            {
+                Succeeded = false,
+                Result = null,
+                Errors = new List<NginxError>()
+                {
+                    new()
+                    {
+                        Code = ex.Message,
+                        Description = ex.StackTrace
+                    }
+                }
+            };
         }
 
         public NginxResult CreateNginxServerList(string name)
@@ -150,7 +162,7 @@ namespace NginxGUI.Data
                 var result = CheckNginxConfig();
                 if (!result.Succeeded)
                 {
-                    return new NginxResult<NginxEntry>
+                    return new ()
                     {
                         Succeeded = result.Succeeded,
                         Errors = result.Errors.Concat(new List<NginxError> { new() { Code = "NGINX_ERR", Description = result.Result }}).ToList()

@@ -5,8 +5,10 @@
 @inject NginxProxyManagementService NginxProxyManagementService;
 @inject NginxService NginxService;
 <h3>Nginx Proxy Service Management</h3>
-<button class="btn btn-primary" @onclick="@(e => NavigationManager.NavigateTo($"/NginxProxyServiceManagement/Create"))">Create</button>
-<button class="btn btn-danger" @onclick="@(e => NginxProxyManagementService.ReloadDaemon())">Reload Daemon</button>
+<div class="btn btn-group" role="group">
+    <button class="btn btn-primary" @onclick="@(e => NavigationManager.NavigateTo($"/NginxProxyServiceManagement/Create"))">Create</button>
+    <button class="btn btn-danger" @onclick="@(e => NginxProxyManagementService.ReloadDaemon())">Reload Daemon</button>
+</div>
 
 @foreach (var error in Errors)
 {
@@ -33,25 +35,15 @@
             <td>@(entry.EnabledOnStartup ? "Enabled on startup" : "Not enabled")</td>
             <td>@(entry.IsActive ? "Running" : "Inactive")</td>
             <td>
-                @if (entry.EnabledOnStartup)
-                {
-                    <button class="btn btn-secondary" @onclick="(e => DisableSystemdTask(entry.SystemdServiceName))">Disable</button>
-                }
-                else
-                {
-                    <button class="btn btn-secondary" @onclick="(e => EnableSystemdTask(entry.SystemdServiceName))">Enable start on startup</button>
-                }
-                @if (entry.IsActive)
-                {
-                    <button class="btn btn-warning" @onclick="(e => StopSystemdTask(entry.SystemdServiceName))">Stop</button>
-                }
-                else
-                {
-                    <button class="btn btn-warning" @onclick="(e => StartSystemdTask(entry.SystemdServiceName))">Start</button>
-
-                }
-                <button class="btn btn-secondary" @onclick="(e => ViewLogs(entry))">View Logs</button>
-                <button class="btn btn-danger" @onclick="(e => Delete(entry))">Delete</button>
+                <div class="btn-group" role="group">
+                    @if (entry.EnabledOnStartup) { <button class="btn btn-secondary" @onclick="(e => DisableSystemdTask(entry.SystemdServiceName))">Disable</button> }
+                    else { <button class="btn btn-secondary" @onclick="(e => EnableSystemdTask(entry.SystemdServiceName))">Enable start on startup</button> }
+                    @if (entry.IsActive) { <button class="btn btn-warning" @onclick="(e => StopSystemdTask(entry.SystemdServiceName))">Stop</button> }
+                    else { <button class="btn btn-warning" @onclick="(e => StartSystemdTask(entry.SystemdServiceName))">Start</button> }
+                    <button class="btn btn-secondary" @onclick="@(e => NavigationManager.NavigateTo($"/NginxProxyServiceManagement/Edit/{entry.SystemdServiceName}"))">Edit Service</button>
+                    <button class="btn btn-secondary" @onclick="(e => ViewLogs(entry))">View Logs</button>
+                    <button class="btn btn-danger" @onclick="(e => Delete(entry))">Delete</button>
+                </div>
             </td>
         </tr>
     }
@@ -79,7 +71,6 @@
             Errors = result.Errors;
         } else 
             Refresh();
-        
     }
 
     public void EnableSystemdTask(string systemdService) => NginxProxyManagementService.EnableProxyServiceOnStartup(systemdService);
