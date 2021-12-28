@@ -23,16 +23,17 @@ jobs:
       run: dotnet build --no-restore
     - name: Zip artifact for deployment
       run: zip release.zip ./* -r
-    - name: Set current date as env variable
-      run: echo "NOW::$(date +'%Y-%m-%dT%H-%M-%S')" >> $GITHUB_ENV
+    - name: Get current date
+      id: date
+      run: echo "::set-output name=date::$(date +'%Y-%m-%dT%H-%M-%S')"
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: $NOW
-        release_name: Release $NOW
+        tag_name: ${{ steps.date.outputs.date }}
+        release_name: Release ${{ steps.date.outputs.date }}
         body: |
           Changed
         draft: false
