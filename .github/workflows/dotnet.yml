@@ -21,10 +21,25 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
-    - name: Upload dotnet test results
-      uses: actions/upload-artifact@v2
+    - name: Zip artifact for deployment
+      run: zip release.zip ./* -r
+    - name: Create Release
+      uses: actions/create-release@v1
+      id: create_release
       with:
-        name: dotnet-results-${{ matrix.dotnet-version }}
-        path: TestResults-${{ matrix.dotnet-version }}
-      # Use always() to always run this step to publish test results when there are test failures
-      if: ${{ always() }}
+        draft: false
+        prerelease: false
+        release_name: ${{ steps.version.outputs.version }}
+        tag_name: ${{ github.ref }}
+        body_path: CHANGELOG.md
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+    - name: Upload artifact
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: release.zip
+        asset_name: NginxParserNet-${{ steps.version.outputs.version }}.zip
+        asset_content_type: application/gzip
